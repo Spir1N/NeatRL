@@ -2,9 +2,10 @@ import pickle
 import neat
 import gymnasium as gym
 import numpy as np
+import imageio
 
 # Загрузка winner'а
-with open("winner_genomev2.pkl", "rb") as f:
+with open("winner_genomev.pkl", "rb") as f:
     winner = pickle.load(f)
 
 # Загрузка конфигурации NEAT
@@ -18,8 +19,7 @@ config = neat.Config(
 )
 
 # Создание среды с отрисовкой
-env = gym.make("BipedalWalker-v3", render_mode="rgb_array")
-observation, _ = env.reset()
+env = gym.make("BipedalWalker-v3", render_mode="rgb_array") 
 
 # Создание нейросети из генома победителя
 net = neat.nn.FeedForwardNetwork.create(winner, config)
@@ -36,10 +36,9 @@ while not done:
     frame = env.render()
     frames.append(frame)
     done = terminated or truncated
+    total_reward += reward
 
-# Сохраняем как видео
-import imageio
-imageio.mimsave("agent_run2.gif", frames, fps=30)
+imageio.mimsave("agent_run.gif", frames, fps=30)
 
 print(f"🎯 Итоговая награда агента: {total_reward:.2f}")
 env.close()

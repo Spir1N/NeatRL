@@ -1,6 +1,6 @@
 [NEAT]
 fitness_criterion     = max
-fitness_threshold     = 350
+fitness_threshold     = 370
 pop_size              = 100
 reset_on_extinction   = False
 
@@ -12,9 +12,9 @@ initial_connection    = full
 feed_forward = True
 compatibility_disjoint_coefficient = 1.0
 compatibility_weight_coefficient = 0.5
-conn_add_prob         = 0.5
+conn_add_prob         = 1.0 
 conn_delete_prob      = 0.3
-node_add_prob         = 0.3
+node_add_prob         = 0.8 
 node_delete_prob      = 0.2
 response_replace_rate = 0.1
 response_max_value    = 2.0
@@ -23,19 +23,19 @@ response_min_value    = 0.1
 
 # Активаторы/функции
 activation_default    = tanh
-activation_mutate_rate= 0.1
-activation_options    = tanh relu
+activation_mutate_rate= 0.0
+activation_options    = tanh
 
 aggregation_default   = sum
-aggregation_mutate_rate = 0.05
-aggregation_options   = sum max
+aggregation_mutate_rate = 0.0
+aggregation_options   = sum
 
 # Геномные параметры
 bias_init_mean        = 0.0
 bias_init_stdev       = 1.0
 bias_max_value        = 30.0
 bias_min_value        = -30.0
-bias_mutate_power     = 0.5
+bias_mutate_power     = 1.0
 bias_mutate_rate      = 0.7
 bias_replace_rate     = 0.1
 
@@ -43,7 +43,7 @@ weight_init_mean      = 0.0
 weight_init_stdev     = 1.0
 weight_max_value      = 30
 weight_min_value      = -30
-weight_mutate_power   = 0.5
+weight_mutate_power   = 1.5
 weight_mutate_rate    = 0.8
 weight_replace_rate   = 0.1
 
@@ -60,9 +60,9 @@ compatibility_threshold = 3.0
 
 [DefaultStagnation]
 species_fitness_func = max
-max_stagnation       = 25
-species_elitism      = 2
+max_stagnation       = 35
+species_elitism      = 3
 
 [DefaultReproduction]
-elitism              = 2
-survival_threshold   = 0.2
+elitism              = 20
+survival_threshold   = 0.1

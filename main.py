@@ -15,12 +15,34 @@ def eval_genome(genome, config):
 
     total_reward = 0.0
     done = False
-    while not done:
+    steps = 0
+    idle_steps = 0
+
+    previous_x = env.unwrapped.hull.position.x
+
+    while not done and steps < 5000:
         action = net.activate(observation)  # Предсказание
         action = np.clip(action, -1, 1)  # Действия должны быть в диапазоне [-1, 1]
+
         observation, reward, terminated, truncated, _ = env.step(action)
+
+        # + shaping: за движение вперёд
+        current_x = env.unwrapped.hull.position.x
+        reward += (current_x - previous_x) * 5.0  # усиливаем сигнал
+        previous_x = current_x
+
+        
+        # Проверка на бездействие - движение слабое или отсутствует
+        if np.linalg.norm(action) < 0.01:
+            idle_steps += 1
+            if idle_steps > 50:
+                break # Прерываем эпизод досрочно
+        else:
+            idle_steps = 0 # Сброс, если есть движение
+
         total_reward += reward
         done = terminated or truncated
+        steps += 1
 
     env.close()
     return total_reward
@@ -49,10 +71,10 @@ def run():
 
     # Запуск NEAT
     pe = ParallelEvaluator(multiprocessing.cpu_count(), eval_genome)
-    winner = population.run(pe.evaluate, n=50)
+    winner = population.run(pe.evaluate, n=200)
 
     # Сохраняем лучшего
-    with open("winner_genomev2.pkl", "wb") as f:
+    with open("winner_genomev.pkl", "wb") as f:
         pickle.dump(winner, f)
 
     print("\n✅ Лучший агент сохранён как 'winner_genome.pkl'")
