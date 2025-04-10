@@ -4,6 +4,8 @@ import numpy as np
 #import visualize  # Необязательно, можно убрать
 import os
 import pickle
+from neat import ParallelEvaluator
+import multiprocessing
 
 # Оценка одного генома (одного агента)
 def eval_genome(genome, config):
@@ -46,7 +48,8 @@ def run():
     population.add_reporter(stats)
 
     # Запуск NEAT
-    winner = population.run(eval_population, n=50)
+    pe = ParallelEvaluator(multiprocessing.cpu_count(), eval_genome)
+    winner = population.run(pe.evaluate, n=50)
 
     # Сохраняем лучшего
     with open("winner_genomev2.pkl", "wb") as f:
