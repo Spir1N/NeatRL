@@ -1,13 +1,11 @@
 import gymnasium as gym
 import neat
 import numpy as np
-#import visualize  # Необязательно, можно убрать
-import os
 import pickle
 from neat import ParallelEvaluator
 import multiprocessing
 
-# Оценка одного генома (одного агента)
+# Оценка генома (одного агента)
 def eval_genome(genome, config):
     env = gym.make("BipedalWalker-v3")
     observation, _ = env.reset()
@@ -46,11 +44,6 @@ def eval_genome(genome, config):
 
     env.close()
     return total_reward
-
-# Оценка всей популяции
-def eval_population(genomes, config):
-    for genome_id, genome in genomes:
-        genome.fitness = eval_genome(genome, config)
 
 # Основной запуск
 def run():
