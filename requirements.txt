@@ -3,3 +3,5 @@ numpy
 neat-python
 swig
 imageio
+graphviz
+matplotlib

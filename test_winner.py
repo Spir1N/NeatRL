@@ -40,5 +40,5 @@ while not done:
 
 imageio.mimsave("agent_run.gif", frames, fps=30)
 
-print(f"🎯 Итоговая награда агента: {total_reward:.2f}")
+print(f"Итоговая награда агента: {total_reward:.2f}")
 env.close()
