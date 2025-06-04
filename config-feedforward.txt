@@ -1,6 +1,6 @@
 [NEAT]
 fitness_criterion     = max
-fitness_threshold     = 420
+fitness_threshold     = 1000
 pop_size              = 100
 reset_on_extinction   = False
 
@@ -46,7 +46,7 @@ weight_max_value      = 30
 weight_min_value      = -30
 weight_mutate_power   = 1.5
 weight_mutate_rate    = 0.8
-weight_replace_rate   = 0.1
+weight_replace_rate   = 0.001
 
 enabled_default       = True
 enabled_mutate_rate   = 0.01

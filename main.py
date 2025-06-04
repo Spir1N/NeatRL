@@ -3,16 +3,18 @@ import neat
 import numpy as np
 import pickle
 from neat import ParallelEvaluator
+from pop import Population
 import multiprocessing
 import csv
 from draw_net import draw_net
+
 
 # Оценка генома (одного агента)
 def eval_genome(genome, config):
     env = gym.make("BipedalWalker-v3")
     observation, _ = env.reset()
     net = neat.nn.FeedForwardNetwork.create(genome, config)
-
+    
     total_reward = 0.0
     done = False
     steps = 0
@@ -27,7 +29,7 @@ def eval_genome(genome, config):
 
         # увеличение награды за движение вперёд
         current_x = env.unwrapped.hull.position.x
-        reward += (current_x - previous_x) * 5.0
+        reward += (current_x - previous_x) * 1.0
         previous_x = current_x
         
         # Проверка на бездействие
@@ -46,7 +48,7 @@ def eval_genome(genome, config):
     return total_reward
 
 # Основной запуск
-def run():
+def run(n=10):
     config_path = "config-feedforward.txt"
     config = neat.Config(
         neat.DefaultGenome,
@@ -57,14 +59,14 @@ def run():
     )
 
     # Создание популяции
-    population = neat.Population(config)
+    population = Population(config)
     population.add_reporter(neat.StdOutReporter(True))  # Вывод логов
     stats = neat.StatisticsReporter()
     population.add_reporter(stats)
 
     # Запуск NEAT
     pe = ParallelEvaluator(multiprocessing.cpu_count(), eval_genome)
-    winner = population.run(pe.evaluate, n=3)
+    winner = population.run(pe.evaluate, n=n)
 
     # Сохраняем лучшего
     with open("winner_genomev.pkl", "wb") as f:
@@ -84,5 +86,6 @@ def run():
     return winner, config
 
 if __name__ == "__main__":
-    winner, config = run()
-    draw_net(config, winner, view=False, filename="winner_net", node_names=None)
+    n = 400
+    winner, config = run(n)
+    draw_net(config, winner, view=False, filename=f"winner_net_{n}", node_names=None)
